@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Blog\BlogResource;
 use App\Model\Blog;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,7 @@ class BlogController extends Controller
     public function index()
     {
         //
+        return Blog::all();
     }
 
     /**
@@ -46,7 +48,9 @@ class BlogController extends Controller
      */
     public function show(Blog $blog)
     {
+
         //
+        return new BlogResource($blog);
     }
 
     /**

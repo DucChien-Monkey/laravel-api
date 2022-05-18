@@ -19,6 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::Resource('/blog', 'BlogController');
 
-Route::group(['prefix'=>'blog'], function() {
+Route::group(['prefix'=>'api'], function() {
    Route::apiResource('/{blog}/reviews','ReviewController');
 });
