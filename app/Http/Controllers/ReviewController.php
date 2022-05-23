@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReviewRequest;
+use App\Http\Resources\ReviewResource;
+use App\Model\Product;
 use App\Model\Review;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ReviewController extends Controller
 {
@@ -15,6 +19,7 @@ class ReviewController extends Controller
     public function index()
     {
         //
+        return ReviewResource::collection($product->reviews);
     }
 
     /**
@@ -33,9 +38,14 @@ class ReviewController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ReviewRequest $request,Blog $blog)
     {
         //
+        $review = new Review($request->all());
+        $blog->reviews()->save($review);
+        return response([
+            'data' => new ReviewResource($review)
+        ],Response::HTTP_CREATED);
     }
 
     /**
@@ -70,6 +80,10 @@ class ReviewController extends Controller
     public function update(Request $request, Review $review)
     {
         //
+        $review->update($request->all());
+        return response([
+            'data' => new ReviewResource($review)
+        ],Response::HTTP_CREATED);
     }
 
     /**
@@ -78,8 +92,10 @@ class ReviewController extends Controller
      * @param  \App\Model\Review  $review
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Review $review)
+    public function destroy(Blog $blog,Review $review)
     {
         //
+        $review->delete();
+        return response(null,Response::HTTP_NO_CONTENT);
     }
 }
